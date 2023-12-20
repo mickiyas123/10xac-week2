@@ -30,11 +30,10 @@ db_params = {
 connection = ConnectToPostgresDb(db_params)
 engine = connection.get_engine()
 
-print(db_params)
-
-def create_postgres_table():
-    tables_info = [
-    {
+class ExtractAndSaveToDatabase:
+    def create_postgres_table(self):
+        tables_info = [
+                {
         'name': 'raw_vehicle',
         'columns': [
             Column('track_id', Integer, primary_key=True),
@@ -42,59 +41,56 @@ def create_postgres_table():
             Column('traveled_d', Float),
             Column('avg_speed', Float),
         ]
-    },
-    {
-        'name': 'raw_vehicle_trajectory',
-        'columns': [
-            Column('id', Integer, primary_key=True),
-            Column('track_id', Integer),
-            Column('lat', Float),
-            Column('lon', Float),
-            Column('speed', Float),
-            Column('lon_acc', Float),
-            Column('lat_acc', Float),
-            Column('time', Float)
+        },
+        {
+            'name': 'raw_vehicle_trajectory',
+            'columns': [
+                Column('id', Integer, primary_key=True),
+                Column('track_id', Integer),
+                Column('lat', Float),
+                Column('lon', Float),
+                 Column('speed', Float),
+                Column('lon_acc', Float),
+                Column('lat_acc', Float),
+                Column('time', Float)
             ]
         },
-    # Add more tables as needed
-    ]
+        # Add more tables as needed
+        ]
 
-    # Create tables using the engine
-    result = connection.create_tables(tables_info)
+        # Create tables using the engine
+        result = connection.create_tables(tables_info)
 
-    if result == "Success":
-        print("Tables created successfully!")
-    else:
-        status, error_message = result
-        print(f"Table creation failed. Error: {error_message}")
+        if result == "Success":
+            print("Tables created successfully!")
+        else:
+            status, error_message = result
+            print(f"Table creation failed. Error: {error_message}")
 
-def load_csv_as_list(file_path):
-    data = []
-    with open(file_path, 'r') as file:
-        csv_reader = csv.reader(file, delimiter=";")
-        for row in csv_reader:
-            modified_row = row[:1] + row[4:-1]
-            data.append(modified_row)
-    return data
-def write_to_postgres():
-    file_path = '../raw-data/20181024_d1_0830_0900.csv'
-    #raw_vehichle = Table('raw_vehichle', connection.metadata, autoload_with=engine)
+    def load_csv_as_list(self, file_path):
+        data = []
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file, delimiter=";")
+            for row in csv_reader:
+                modified_row = row[:1] + row[4:-1]
+                data.append(modified_row)
+        return data
+    def write_to_postgres(self):
+        file_path = '../raw-data/20181024_d1_0830_0900.csv'
+        raw_vehichle = Table('raw_vehichle', connection.metadata, autoload_with=engine)
 
-    df = pd.read_csv(file_path,index_col=False, delimiter='; ')
-
-    raw_vehicle_data = df[['track_id', 'type', 'traveled_d', 'avg_speed']]
-    raw_vehicle_data.to_sql('raw_vehicle', con=engine, if_exists='append', index=False)
-    csv_data = load_csv_as_list(file_path)
-    column_names = csv_data[0]
-    data_rows = csv_data[1:]
-    raw_vechicle_trajectory_list = []
-    for i in range(0, len(data_rows)):
-        id = data_rows[i][0]
-        for j in range(1, len(data_rows[i]), 6):
-            sublist = data_rows[i][j:j + 6]
-            sublist.insert(0, id)
-            raw_vechicle_trajectory_list.append(sublist)
-    df_trajectory = pd.DataFrame(raw_vechicle_trajectory_list, columns=["track_id", "lat", "lon", "speed", "lon_acc", "lat_acc", "time"])
-    df_trajectory.to_sql('raw_vehicle_trajectory', con=engine, if_exists='append', index=False)
-create_postgres_table()
-write_to_postgres()
+        df = pd.read_csv(file_path,index_col=False, delimiter='; ')
+        raw_vehicle_data = df[['track_id', 'type', 'traveled_d', 'avg_speed']]
+        raw_vehicle_data.to_sql('raw_vehicle', con=engine, if_exists='append', index=False)
+        csv_data = self.load_csv_as_list(file_path)
+        column_names = csv_data[0]
+        data_rows = csv_data[1:]
+        raw_vechicle_trajectory_list = []
+        for i in range(0, len(data_rows)):
+            id = data_rows[i][0]
+            for j in range(1, len(data_rows[i]), 6):
+                sublist = data_rows[i][j:j + 6]
+                sublist.insert(0, id)
+                raw_vechicle_trajectory_list.append(sublist)
+        df_trajectory = pd.DataFrame(raw_vechicle_trajectory_list, columns=["track_id", "lat", "lon", "speed", "lon_acc", "lat_acc", "time"])
+        df_trajectory.to_sql('raw_vehicle_trajectory', con=engine, if_exists='append', index=False)
