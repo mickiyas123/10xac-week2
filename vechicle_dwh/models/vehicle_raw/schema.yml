@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: week_two
+    database: week_two
+    schema: public
+    tables:
+      - name: raw_vehicle
+      - name: raw_vehicle_trajectory
