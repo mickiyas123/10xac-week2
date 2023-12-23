@@ -1,0 +1,80 @@
+[2023-12-23T12:39:12.736+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.create_raw_data_storing_tables manual__2023-12-23T12:32:05.457646+00:00 [queued]>
+[2023-12-23T12:39:12.746+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.create_raw_data_storing_tables manual__2023-12-23T12:32:05.457646+00:00 [queued]>
+[2023-12-23T12:39:12.747+0000] {taskinstance.py:2171} INFO - Starting attempt 2 of 6
+[2023-12-23T12:39:12.765+0000] {taskinstance.py:2192} INFO - Executing <Task(PostgresOperator): create_raw_data_storing_tables> on 2023-12-23 12:32:05.457646+00:00
+[2023-12-23T12:39:12.770+0000] {standard_task_runner.py:60} INFO - Started process 73 to run task
+[2023-12-23T12:39:12.774+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'dag_to_dum_raw_data_to_postgres', 'create_raw_data_storing_tables', 'manual__2023-12-23T12:32:05.457646+00:00', '--job-id', '1211', '--raw', '--subdir', 'DAGS_FOLDER/dump_raw_data_to_postgres.py', '--cfg-path', '/tmp/tmpl9x15n4f']
+[2023-12-23T12:39:12.775+0000] {standard_task_runner.py:88} INFO - Job 1211: Subtask create_raw_data_storing_tables
+[2023-12-23T12:39:12.830+0000] {task_command.py:423} INFO - Running <TaskInstance: dag_to_dum_raw_data_to_postgres.create_raw_data_storing_tables manual__2023-12-23T12:32:05.457646+00:00 [running]> on host cf3648c4d761
+[2023-12-23T12:39:12.927+0000] {taskinstance.py:2481} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='10 academy' AIRFLOW_CTX_DAG_ID='dag_to_dum_raw_data_to_postgres' AIRFLOW_CTX_TASK_ID='create_raw_data_storing_tables' AIRFLOW_CTX_EXECUTION_DATE='2023-12-23T12:32:05.457646+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2023-12-23T12:32:05.457646+00:00'
+[2023-12-23T12:39:12.929+0000] {sql.py:276} INFO - Executing: create table if not exists raw_vehicle (
+    track_id SERIAL PRIMARY KEY,
+    type VARCHAR(255),
+    traveled_d FLOAT,
+    avg_speed FLOAT
+);
+create table if not exists raw_vehicle_trajectory(
+    id SERIAL PRIMARY KEY,
+    lat FLOAT,
+    lon FLOAT,
+    speed FLOAT,
+    lon_acc FLOAT,
+    lat_acc FLOAT,
+    time FLOAT,
+    track_id INTEGER REFERENCEs raw_vehicle(track_id)
+);
+
+create type status_enum AS ENUM ('completed', 'failed')
+
+create table if not exists csv_file_name(
+    id id SERIAL PRIMARY KEY,
+    name VARCHAR(500)
+    status status_enum
+)
+[2023-12-23T12:39:12.940+0000] {base.py:83} INFO - Using connection ID 'week_two_dwh' for task execution.
+[2023-12-23T12:39:12.956+0000] {base.py:83} INFO - Using connection ID 'week_two_dwh' for task execution.
+[2023-12-23T12:39:12.981+0000] {sql.py:432} INFO - Running statement: create table if not exists raw_vehicle (
+    track_id SERIAL PRIMARY KEY,
+    type VARCHAR(255),
+    traveled_d FLOAT,
+    avg_speed FLOAT
+);
+create table if not exists raw_vehicle_trajectory(
+    id SERIAL PRIMARY KEY,
+    lat FLOAT,
+    lon FLOAT,
+    speed FLOAT,
+    lon_acc FLOAT,
+    lat_acc FLOAT,
+    time FLOAT,
+    track_id INTEGER REFERENCEs raw_vehicle(track_id)
+);
+
+create type status_enum AS ENUM ('completed', 'failed')
+
+create table if not exists csv_file_name(
+    id id SERIAL PRIMARY KEY,
+    name VARCHAR(500)
+    status status_enum
+), parameters: None
+[2023-12-23T12:39:12.984+0000] {taskinstance.py:2699} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/operators/sql.py", line 282, in execute
+    output = hook.run(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/hooks/sql.py", line 392, in run
+    self._run_command(cur, sql_statement, parameters)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/common/sql/hooks/sql.py", line 437, in _run_command
+    cur.execute(sql_statement)
+psycopg2.errors.SyntaxError: syntax error at or near "create"
+LINE 20: create table if not exists csv_file_name(
+         ^
+
+[2023-12-23T12:39:12.997+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=dag_to_dum_raw_data_to_postgres, task_id=create_raw_data_storing_tables, execution_date=20231223T123205, start_date=20231223T123912, end_date=20231223T123912
+[2023-12-23T12:39:13.014+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 1211 for task create_raw_data_storing_tables (syntax error at or near "create"
+LINE 20: create table if not exists csv_file_name(
+         ^
+; 73)
+[2023-12-23T12:39:13.026+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2023-12-23T12:39:13.044+0000] {taskinstance.py:3281} INFO - 0 downstream tasks scheduled from follow-on schedule check

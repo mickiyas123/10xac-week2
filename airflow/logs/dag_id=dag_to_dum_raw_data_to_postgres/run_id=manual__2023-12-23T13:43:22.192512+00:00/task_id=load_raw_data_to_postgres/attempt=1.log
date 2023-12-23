@@ -1,0 +1,66 @@
+[2023-12-23T13:43:25.233+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T13:43:22.192512+00:00 [queued]>
+[2023-12-23T13:43:25.244+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T13:43:22.192512+00:00 [queued]>
+[2023-12-23T13:43:25.245+0000] {taskinstance.py:2171} INFO - Starting attempt 1 of 6
+[2023-12-23T13:43:25.397+0000] {taskinstance.py:2192} INFO - Executing <Task(PythonOperator): load_raw_data_to_postgres> on 2023-12-23 13:43:22.192512+00:00
+[2023-12-23T13:43:25.403+0000] {standard_task_runner.py:60} INFO - Started process 341 to run task
+[2023-12-23T13:43:25.408+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'dag_to_dum_raw_data_to_postgres', 'load_raw_data_to_postgres', 'manual__2023-12-23T13:43:22.192512+00:00', '--job-id', '1228', '--raw', '--subdir', 'DAGS_FOLDER/dump_raw_data_to_postgres.py', '--cfg-path', '/tmp/tmpap9tok28']
+[2023-12-23T13:43:25.412+0000] {standard_task_runner.py:88} INFO - Job 1228: Subtask load_raw_data_to_postgres
+[2023-12-23T13:43:25.466+0000] {task_command.py:423} INFO - Running <TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T13:43:22.192512+00:00 [running]> on host 51dca2e3ed8e
+[2023-12-23T13:43:25.566+0000] {taskinstance.py:2481} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='10 academy' AIRFLOW_CTX_DAG_ID='dag_to_dum_raw_data_to_postgres' AIRFLOW_CTX_TASK_ID='load_raw_data_to_postgres' AIRFLOW_CTX_EXECUTION_DATE='2023-12-23T13:43:22.192512+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2023-12-23T13:43:22.192512+00:00'
+[2023-12-23T13:43:25.632+0000] {taskinstance.py:2699} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1910, in _execute_context
+    self.dialect.do_execute(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 736, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedTable: relation "csv_file_name" does not exist
+LINE 1: SELECT status FROM csv_file_name WHERE name = '..' AND statu...
+                           ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/dump_raw_data_to_postgres.py", line 36, in write_to_database
+    check_csv = check_csv_file(file_path)
+  File "/opt/airflow/dags/dump_raw_data_to_postgres.py", line 29, in check_csv_file
+    status_result = connection.execute(check_status_query, csv_file_name=csv_file_name).fetchone()
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1385, in execute
+    return meth(self, multiparams, params, _EMPTY_EXECUTION_OPTS)
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 334, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1577, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1953, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2134, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1910, in _execute_context
+    self.dialect.do_execute(
+  File "/home/airflow/.local/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 736, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "csv_file_name" does not exist
+LINE 1: SELECT status FROM csv_file_name WHERE name = '..' AND statu...
+                           ^
+
+[SQL: SELECT status FROM csv_file_name WHERE name = %(csv_file_name)s AND status = 'completed']
+[parameters: {'csv_file_name': '..'}]
+(Background on this error at: https://sqlalche.me/e/14/f405)
+[2023-12-23T13:43:25.650+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=dag_to_dum_raw_data_to_postgres, task_id=load_raw_data_to_postgres, execution_date=20231223T134322, start_date=20231223T134325, end_date=20231223T134325
+[2023-12-23T13:43:25.673+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 1228 for task load_raw_data_to_postgres ((psycopg2.errors.UndefinedTable) relation "csv_file_name" does not exist
+LINE 1: SELECT status FROM csv_file_name WHERE name = '..' AND statu...
+                           ^
+
+[SQL: SELECT status FROM csv_file_name WHERE name = %(csv_file_name)s AND status = 'completed']
+[parameters: {'csv_file_name': '..'}]
+(Background on this error at: https://sqlalche.me/e/14/f405); 341)
+[2023-12-23T13:43:25.699+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2023-12-23T13:43:25.716+0000] {taskinstance.py:3281} INFO - 0 downstream tasks scheduled from follow-on schedule check

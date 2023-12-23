@@ -1,0 +1,14 @@
+[2023-12-23T14:24:02.102+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T14:18:48.666091+00:00 [queued]>
+[2023-12-23T14:24:02.112+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T14:18:48.666091+00:00 [queued]>
+[2023-12-23T14:24:02.113+0000] {taskinstance.py:2171} INFO - Starting attempt 2 of 6
+[2023-12-23T14:24:02.280+0000] {taskinstance.py:2192} INFO - Executing <Task(PythonOperator): load_raw_data_to_postgres> on 2023-12-23 14:18:48.666091+00:00
+[2023-12-23T14:24:02.287+0000] {standard_task_runner.py:60} INFO - Started process 192 to run task
+[2023-12-23T14:24:02.291+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'dag_to_dum_raw_data_to_postgres', 'load_raw_data_to_postgres', 'manual__2023-12-23T14:18:48.666091+00:00', '--job-id', '1297', '--raw', '--subdir', 'DAGS_FOLDER/dump_raw_data_to_postgres.py', '--cfg-path', '/tmp/tmpt31ujz4t']
+[2023-12-23T14:24:02.295+0000] {standard_task_runner.py:88} INFO - Job 1297: Subtask load_raw_data_to_postgres
+[2023-12-23T14:24:02.369+0000] {task_command.py:423} INFO - Running <TaskInstance: dag_to_dum_raw_data_to_postgres.load_raw_data_to_postgres manual__2023-12-23T14:18:48.666091+00:00 [running]> on host 417a45a22e6c
+[2023-12-23T14:24:02.464+0000] {taskinstance.py:2481} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='10 academy' AIRFLOW_CTX_DAG_ID='dag_to_dum_raw_data_to_postgres' AIRFLOW_CTX_TASK_ID='load_raw_data_to_postgres' AIRFLOW_CTX_EXECUTION_DATE='2023-12-23T14:18:48.666091+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2023-12-23T14:18:48.666091+00:00'
+[2023-12-23T14:24:02.467+0000] {warnings.py:109} WARNING - /opt/***/dags/dump_raw_data_to_postgres.py:29: ParserWarning: Falling back to the 'python' engine because the 'c' engine does not support regex separators (separators > 1 char and different from '\s+' are interpreted as regex); you can avoid this warning by specifying engine='python'.
+  df = pd.read_csv(file_path,index_col=False, delimiter='; ')
+
+[2023-12-23T14:24:04.397+0000] {local_task_job_runner.py:234} INFO - Task exited with return code -9
+[2023-12-23T14:24:04.459+0000] {taskinstance.py:3281} INFO - 0 downstream tasks scheduled from follow-on schedule check

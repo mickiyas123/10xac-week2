@@ -1,0 +1,5 @@
+[2023-12-23T11:09:51.792+0000] {processor.py:161} INFO - Started process (PID=152) to work on /opt/airflow/dags/load_raw_data_to_postgres.py
+[2023-12-23T11:09:51.793+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/load_raw_data_to_postgres.py for tasks to queue
+[2023-12-23T11:09:51.797+0000] {logging_mixin.py:188} INFO - [2023-12-23T11:09:51.796+0000] {dagbag.py:538} INFO - Filling up the DagBag from /opt/airflow/dags/load_raw_data_to_postgres.py
+[2023-12-23T11:09:51.803+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/load_raw_data_to_postgres.py
+[2023-12-23T11:09:51.821+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/load_raw_data_to_postgres.py took 0.033 seconds

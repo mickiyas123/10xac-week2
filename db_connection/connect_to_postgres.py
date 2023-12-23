@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 class ConnectToPostgresDb:
     def __init__(self, db_params):
         try:
+            print(type(db_params['host']))
             self.engine = create_engine(f"postgresql+psycopg2://{db_params['user']}:{db_params['password']}@{db_params['host']}:{db_params['port']}/{db_params['database']}")
             self.metadata = MetaData()
             self.metadata.bind = self.engine
